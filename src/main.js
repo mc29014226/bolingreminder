@@ -8,6 +8,8 @@ import { renderInvoiceList } from './pages/invoiceList.js';
 import { renderPaymentList } from './pages/paymentList.js';
 import { renderSettings } from './pages/settings.js';
 
+import { renderScheduleList } from './pages/scheduleList.js';
+
 const app = document.querySelector('#app');
 
 function renderLayout() {
@@ -18,6 +20,7 @@ function renderLayout() {
       <h2>發票管理</h2>
 
       <button data-page="dashboard">首頁總覽</button>
+      <button data-page="schedule">發票時程表</button>
       <button data-page="vendors">廠商管理</button>
       <button data-page="projects">案件管理</button>
       <button data-page="invoices">發票紀錄</button>
@@ -53,6 +56,7 @@ function changePage(page) {
   if (page === 'invoices') renderInvoiceList(pageEl);
   if (page === 'payments') renderPaymentList(pageEl);
   if (page === 'settings') renderSettings(pageEl);
+  if (page === 'schedule') renderScheduleList(pageEl);
 }
 
 renderLayout();

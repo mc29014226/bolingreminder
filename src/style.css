@@ -397,3 +397,48 @@ code {
   border-radius: 6px;
   cursor: pointer;
 }
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.schedule-table {
+  min-width: 1400px;
+}
+
+.schedule-table th,
+.schedule-table td {
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.legend {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.status-done {
+  background: #22c55e;
+  color: #000;
+}
+
+.status-check {
+  background: #fde047;
+  color: #000;
+}
+
+.status-invoice {
+  background: #ef4444;
+  color: #fff;
+}
