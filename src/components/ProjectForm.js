@@ -1,16 +1,54 @@
 import { addProject, updateProject } from '../services/projectService.js';
+import { getVendors } from '../services/vendorService.js';
 
 export function renderProjectForm(editingProject = null) {
   const isEdit = Boolean(editingProject);
+  const vendors = getVendors();
 
   return `
     <div class="form-box">
       <h3>${isEdit ? '編輯案件' : '新增案件'}</h3>
 
-      <input id="vendor" placeholder="廠商名稱" value="${editingProject?.vendor || ''}">
-      <input id="taxId" placeholder="統一編號" value="${editingProject?.taxId || ''}">
-      <input id="projectName" placeholder="案名" value="${editingProject?.projectName || ''}">
-      <input id="amount" placeholder="總金額" value="${editingProject?.amount || ''}">
+      <select id="vendorSelect">
+        <option value="">請選擇廠商</option>
+
+        ${vendors.map(vendor => `
+          <option
+            value="${vendor.id}"
+            data-name="${vendor.vendorName}"
+            data-taxid="${vendor.taxId}"
+            ${editingProject?.vendorId == vendor.id ? 'selected' : ''}
+          >
+            ${vendor.vendorName}
+          </option>
+        `).join('')}
+      </select>
+
+      <input
+        id="vendor"
+        placeholder="廠商名稱"
+        value="${editingProject?.vendor || ''}"
+        readonly
+      >
+
+      <input
+        id="taxId"
+        placeholder="統一編號"
+        value="${editingProject?.taxId || ''}"
+        readonly
+      >
+
+      <input
+        id="projectName"
+        placeholder="案名"
+        value="${editingProject?.projectName || ''}"
+      >
+
+      <input
+        id="amount"
+        placeholder="總金額"
+        value="${editingProject?.amount || ''}"
+      >
 
       <select id="contractReceived">
         <option value="未收到" ${editingProject?.contractReceived === '未收到' ? 'selected' : ''}>未收到合約</option>
@@ -24,7 +62,11 @@ export function renderProjectForm(editingProject = null) {
         <option value="每年" ${editingProject?.invoiceCycle === '每年' ? 'selected' : ''}>每年</option>
       </select>
 
-      <input id="invoiceDate" type="date" value="${editingProject?.invoiceDate || ''}">
+      <input
+        id="invoiceDate"
+        type="date"
+        value="${editingProject?.invoiceDate || ''}"
+      >
 
       <select id="status">
         <option value="待確認" ${editingProject?.status === '待確認' ? 'selected' : ''}>待確認</option>
@@ -42,10 +84,28 @@ export function renderProjectForm(editingProject = null) {
 }
 
 export function bindProjectForm(onSuccess, editingProject = null) {
+  const vendorSelect = document.querySelector('#vendorSelect');
+  const vendorInput = document.querySelector('#vendor');
+  const taxIdInput = document.querySelector('#taxId');
+
+  function syncVendorInfo() {
+    const option = vendorSelect.options[vendorSelect.selectedIndex];
+
+    vendorInput.value = option.dataset.name || '';
+    taxIdInput.value = option.dataset.taxid || '';
+  }
+
+  vendorSelect.onchange = syncVendorInfo;
+
+  if (vendorSelect.value) {
+    syncVendorInfo();
+  }
+
   document.querySelector('#saveProject').onclick = () => {
     const data = {
-      vendor: document.querySelector('#vendor').value,
-      taxId: document.querySelector('#taxId').value,
+      vendorId: vendorSelect.value,
+      vendor: vendorInput.value,
+      taxId: taxIdInput.value,
       projectName: document.querySelector('#projectName').value,
       amount: document.querySelector('#amount').value,
       contractReceived: document.querySelector('#contractReceived').value,
