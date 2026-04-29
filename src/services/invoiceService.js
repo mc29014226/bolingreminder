@@ -1,46 +1,27 @@
-const KEY = 'invoices_data';
+import {
+  findAllInvoices,
+  findInvoiceById,
+  createInvoice,
+  editInvoice,
+  removeInvoice
+} from '../repositories/invoiceRepository.js';
 
 export function getInvoices() {
-  return JSON.parse(localStorage.getItem(KEY) || '[]');
-}
-
-export function saveInvoices(data) {
-  localStorage.setItem(KEY, JSON.stringify(data));
-}
-
-export function addInvoice(invoice) {
-  const list = getInvoices();
-
-  list.push({
-    id: Date.now(),
-    createdAt: new Date().toISOString(),
-    ...invoice
-  });
-
-  saveInvoices(list);
-}
-
-export function updateInvoice(id, newData) {
-  const list = getInvoices().map((item) => {
-    if (String(item.id) === String(id)) {
-      return {
-        ...item,
-        ...newData,
-        updatedAt: new Date().toISOString()
-      };
-    }
-
-    return item;
-  });
-
-  saveInvoices(list);
-}
-
-export function deleteInvoice(id) {
-  const list = getInvoices().filter((item) => String(item.id) !== String(id));
-  saveInvoices(list);
+  return findAllInvoices();
 }
 
 export function getInvoiceById(id) {
-  return getInvoices().find((item) => String(item.id) === String(id));
+  return findInvoiceById(id);
+}
+
+export function addInvoice(data) {
+  return createInvoice(data);
+}
+
+export function updateInvoice(id, data) {
+  return editInvoice(id, data);
+}
+
+export function deleteInvoice(id) {
+  return removeInvoice(id);
 }
