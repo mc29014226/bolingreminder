@@ -2,15 +2,28 @@ import { getProjects } from '../services/projectService.js';
 import {
   STATUS_COLOR_CLASS,
   getInvoiceMonths,
-  getScheduleCellText
+  getScheduleCellText,
+  toRocYear
 } from '../utils/schedule.js';
 
-export function renderScheduleList(container) {
+export function renderScheduleList(container, selectedYear = new Date().getFullYear()) {
   const projects = getProjects();
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
   container.innerHTML = `
     <h1>發票時程表</h1>
+
+    <div class="toolbar">
+      <label>年度：</label>
+
+      <select id="yearSelect">
+        ${[2024, 2025, 2026, 2027, 2028].map(year => `
+          <option value="${year}" ${year === selectedYear ? 'selected' : ''}>
+            ${toRocYear(year)}年
+          </option>
+        `).join('')}
+      </select>
+    </div>
 
     <div class="legend">
       <span><b class="dot status-done"></b>已結案</span>
@@ -27,7 +40,7 @@ export function renderScheduleList(container) {
             <th>統一編號</th>
             <th>案名</th>
             <th>總金額</th>
-            <th>發票開立週期</th>
+            <th>週期</th>
             ${months.map(month => `<th>${month}月</th>`).join('')}
           </tr>
         </thead>
@@ -37,8 +50,9 @@ export function renderScheduleList(container) {
             projects.length === 0
               ? `<tr><td colspan="18">尚無案件資料</td></tr>`
               : projects.map((project, index) => {
-                  const invoiceMonths = getInvoiceMonths(project);
-                  const colorClass = STATUS_COLOR_CLASS[project.status] || 'status-check';
+                  const invoiceMonths = getInvoiceMonths(project, selectedYear);
+                  const colorClass =
+                    STATUS_COLOR_CLASS[project.status] || 'status-check';
 
                   return `
                     <tr>
@@ -54,7 +68,9 @@ export function renderScheduleList(container) {
 
                         return `
                           <td class="${active ? colorClass : ''}">
-                            ${active ? getScheduleCellText(project, month) : ''}
+                            ${active
+                              ? getScheduleCellText(project, month, selectedYear)
+                              : ''}
                           </td>
                         `;
                       }).join('')}
@@ -66,4 +82,8 @@ export function renderScheduleList(container) {
       </table>
     </div>
   `;
+
+  document.querySelector('#yearSelect').onchange = (e) => {
+    renderScheduleList(container, Number(e.target.value));
+  };
 }
