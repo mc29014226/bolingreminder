@@ -30,9 +30,9 @@ function isCurrentYear(dateString) {
   return date.getFullYear() === now.getFullYear();
 }
 
-export function renderDashboard(container) {
-  const projects = getProjects();
-  const invoices = getInvoices();
+export async function renderDashboard(container) {
+  const projects = await getProjects();
+  const invoices = await getInvoices();
 
   const pendingCheck = projects.filter(item => item.status === '待確認').length;
   const pendingInvoice = projects.filter(item => item.status === '待開發票').length;

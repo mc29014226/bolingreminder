@@ -6,22 +6,22 @@ import {
   removeProject
 } from '../repositories/projectRepository.js';
 
-export function getProjects() {
-  return findAllProjects();
+export async function getProjects() {
+  return await findAllProjects();
 }
 
-export function getProjectById(id) {
-  return findProjectById(id);
+export async function getProjectById(id) {
+  return await findProjectById(id);
 }
 
-export function addProject(data) {
-  return createProject(data);
+export async function addProject(data) {
+  return await createProject(data);
 }
 
-export function updateProject(id, data) {
-  return editProject(id, data);
+export async function updateProject(id, data) {
+  return await editProject(id, data);
 }
 
-export function deleteProject(id) {
-  return removeProject(id);
+export async function deleteProject(id) {
+  return await removeProject(id);
 }

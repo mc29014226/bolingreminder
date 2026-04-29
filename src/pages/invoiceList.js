@@ -9,23 +9,25 @@ import {
   bindInvoiceForm
 } from '../components/InvoiceForm.js';
 
-export function renderInvoiceList(container, editId = null) {
-  const data = getInvoices();
-  const editingInvoice = editId ? getInvoiceById(editId) : null;
+export async function renderInvoiceList(container, editId = null) {
+  const data = await getInvoices();
+  const editingInvoice = editId
+    ? await getInvoiceById(editId)
+    : null;
+
+  const formHtml = renderInvoiceForm(editingInvoice);
 
   container.innerHTML = `
     <h1>發票紀錄</h1>
 
-    ${renderInvoiceForm(editingInvoice)}
+    ${formHtml}
 
     <table>
       <thead>
         <tr>
           <th>開立日期</th>
-          <th>發票月份</th>
           <th>發票號碼</th>
           <th>買受人</th>
-          <th>統編</th>
           <th>服務品名</th>
           <th>總計</th>
           <th>收款</th>
@@ -36,14 +38,12 @@ export function renderInvoiceList(container, editId = null) {
       <tbody>
         ${
           data.length === 0
-            ? `<tr><td colspan="9">尚無發票資料</td></tr>`
+            ? `<tr><td colspan="7">尚無發票資料</td></tr>`
             : data.map(item => `
               <tr>
                 <td>${item.invoiceDate || ''}</td>
-                <td>${item.invoiceMonth || ''}</td>
                 <td>${item.invoiceNumber || ''}</td>
                 <td>${item.buyerName || ''}</td>
-                <td>${item.taxId || ''}</td>
                 <td>${item.serviceName || ''}</td>
                 <td>${item.totalAmount || ''}</td>
                 <td>${item.isPaid || ''}</td>
@@ -61,8 +61,8 @@ export function renderInvoiceList(container, editId = null) {
   bindInvoiceForm(loadPage, editingInvoice);
 
   document.querySelectorAll('.del-btn').forEach(btn => {
-    btn.onclick = () => {
-      deleteInvoice(btn.dataset.id);
+    btn.onclick = async () => {
+      await deleteInvoice(btn.dataset.id);
       loadPage();
     };
   });
@@ -73,7 +73,7 @@ export function renderInvoiceList(container, editId = null) {
     };
   });
 
-  function loadPage() {
-    renderInvoiceList(container);
+  async function loadPage() {
+    await renderInvoiceList(container);
   }
 }

@@ -9,14 +9,18 @@ import {
   bindVendorForm
 } from '../components/VendorForm.js';
 
-export function renderVendorList(container, editId = null) {
-  const data = getVendors();
-  const editingVendor = editId ? getVendorById(editId) : null;
+export async function renderVendorList(container, editId = null) {
+  const data = await getVendors();
+  const editingVendor = editId
+    ? await getVendorById(editId)
+    : null;
+
+  const formHtml = renderVendorForm(editingVendor);
 
   container.innerHTML = `
     <h1>廠商管理</h1>
 
-    ${renderVendorForm(editingVendor)}
+    ${formHtml}
 
     <table>
       <thead>
@@ -55,8 +59,8 @@ export function renderVendorList(container, editId = null) {
   bindVendorForm(loadPage, editingVendor);
 
   document.querySelectorAll('.del-btn').forEach(btn => {
-    btn.onclick = () => {
-      deleteVendor(btn.dataset.id);
+    btn.onclick = async () => {
+      await deleteVendor(btn.dataset.id);
       loadPage();
     };
   });
@@ -67,7 +71,7 @@ export function renderVendorList(container, editId = null) {
     };
   });
 
-  function loadPage() {
-    renderVendorList(container);
+  async function loadPage() {
+    await renderVendorList(container);
   }
 }
