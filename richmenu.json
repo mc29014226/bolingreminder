@@ -1,0 +1,53 @@
+{
+  "size": {
+    "width": 2500,
+    "height": 1686
+  },
+  "selected": true,
+  "name": "Boling Reminder Menu",
+  "chatBarText": "發票管理",
+  "areas": [
+    {
+      "bounds": { "x": 0, "y": 0, "width": 1250, "height": 562 },
+      "action": {
+        "type": "message",
+        "text": "查詢待確認案件"
+      }
+    },
+    {
+      "bounds": { "x": 1250, "y": 0, "width": 1250, "height": 562 },
+      "action": {
+        "type": "message",
+        "text": "查詢待開發票"
+      }
+    },
+    {
+      "bounds": { "x": 0, "y": 562, "width": 1250, "height": 562 },
+      "action": {
+        "type": "message",
+        "text": "查詢未收款發票"
+      }
+    },
+    {
+      "bounds": { "x": 1250, "y": 562, "width": 1250, "height": 562 },
+      "action": {
+        "type": "message",
+        "text": "查詢本月金額"
+      }
+    },
+    {
+      "bounds": { "x": 0, "y": 1124, "width": 1250, "height": 562 },
+      "action": {
+        "type": "message",
+        "text": "查詢今年金額"
+      }
+    },
+    {
+      "bounds": { "x": 1250, "y": 1124, "width": 1250, "height": 562 },
+      "action": {
+        "type": "uri",
+        "uri": "https://你的網站網址"
+      }
+    }
+  ]
+}
